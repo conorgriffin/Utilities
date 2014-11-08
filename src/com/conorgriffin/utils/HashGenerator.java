@@ -14,6 +14,14 @@ public class HashGenerator {
 
     private String hashString;
 
+    /**
+     * Creates a HashGenerator to generate a hash of a given file
+     *
+     * @param file
+     * @param algorithm
+     * @throws NoSuchAlgorithmException
+     * @throws IOException
+     */
     public HashGenerator(File file, Algorithm algorithm) throws NoSuchAlgorithmException, IOException {
 
         MessageDigest md = MessageDigest.getInstance(algorithm.getValue());
@@ -27,32 +35,50 @@ public class HashGenerator {
         fis.close();
     }
 
-    public HashGenerator(String input, Algorithm algorithm) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+    /**
+     * Creates a HashGenerator to generate a hash of a given String using the specified algorithm and default
+     * character encoding of UTF-8
+     *
+     * @param input
+     * @param algorithm
+     * @throws UnsupportedEncodingException
+     * @throws NoSuchAlgorithmException
+     */
+    public HashGenerator(String input, Algorithm algorithm) throws UnsupportedEncodingException,
+            NoSuchAlgorithmException {
         this(input, algorithm, "UTF-8");
     }
 
-    public HashGenerator(String input, Algorithm algorithm, String encoding) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+    /**
+     * Creates a HashGenerator to generate a hash of a given String using the specified algorithm and character
+     * encoding
+     *
+     * @param input
+     * @param algorithm
+     * @param encoding
+     * @throws NoSuchAlgorithmException
+     * @throws UnsupportedEncodingException
+     */
+    public HashGenerator(String input, Algorithm algorithm, String encoding) throws NoSuchAlgorithmException,
+            UnsupportedEncodingException {
         MessageDigest md = MessageDigest.getInstance(algorithm.getValue());
         md.reset();
         md.update(input.getBytes(encoding));
         generateHashString(md.digest());
     }
 
-    public static void main(String[] args) {
-        try {
-            HashGenerator hg = new HashGenerator("Conor", Algorithm.SHA1);
-            System.out.println("SHA1 hash for \"Conor\" is \"" + hg.getHashString() + "\"");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-    }
-
+    /**
+     * Get the value of the calculated hash as a String
+     * @return
+     */
     public String getHashString() {
         return hashString;
     }
 
+    /**
+     * Convert a byte array to a hash String
+     * @param digestBytes
+     */
     private void generateHashString(byte[] digestBytes) {
         StringBuilder sb = new StringBuilder("");
         for (byte b : digestBytes) {
