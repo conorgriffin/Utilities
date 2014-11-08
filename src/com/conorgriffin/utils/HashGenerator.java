@@ -24,6 +24,7 @@ public class HashGenerator {
             md.update(dataBytes, 0, bytesRead);
         }
         generateHashString(md.digest());
+        fis.close();
     }
 
     public HashGenerator(String input, String algorithm) throws UnsupportedEncodingException, NoSuchAlgorithmException {
