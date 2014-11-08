@@ -14,9 +14,9 @@ public class HashGenerator {
 
     private String hashString;
 
-    public HashGenerator(File file, String algorithm) throws NoSuchAlgorithmException, IOException {
+    public HashGenerator(File file, Algorithm algorithm) throws NoSuchAlgorithmException, IOException {
 
-        MessageDigest md = MessageDigest.getInstance(algorithm);
+        MessageDigest md = MessageDigest.getInstance(algorithm.getValue());
         FileInputStream fis = new FileInputStream(file);
         byte[] dataBytes = new byte[8192];
         int bytesRead;
@@ -27,12 +27,12 @@ public class HashGenerator {
         fis.close();
     }
 
-    public HashGenerator(String input, String algorithm) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+    public HashGenerator(String input, Algorithm algorithm) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         this(input, algorithm, "UTF-8");
     }
 
-    public HashGenerator(String input, String algorithm, String encoding) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-        MessageDigest md = MessageDigest.getInstance(algorithm);
+    public HashGenerator(String input, Algorithm algorithm, String encoding) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        MessageDigest md = MessageDigest.getInstance(algorithm.getValue());
         md.reset();
         md.update(input.getBytes(encoding));
         generateHashString(md.digest());
@@ -40,7 +40,7 @@ public class HashGenerator {
 
     public static void main(String[] args) {
         try {
-            HashGenerator hg = new HashGenerator("Conor", "SHA-1");
+            HashGenerator hg = new HashGenerator("Conor", Algorithm.SHA1);
             System.out.println("SHA1 hash for \"Conor\" is \"" + hg.getHashString() + "\"");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -60,5 +60,19 @@ public class HashGenerator {
         }
 
         hashString = sb.toString();
+    }
+
+    public enum Algorithm {
+        MD2("MD5"), MD5("MD5"), SHA1("SHA-1"), SHA_256("SHA-256"), SHA_512("SHA-512");
+
+        private String value;
+
+        private Algorithm(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return this.value;
+        }
     }
 }
